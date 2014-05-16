@@ -20,7 +20,7 @@ $valid_intervals = array("daily", "weekly", "monthly", "yearly");
 if(!in_array($interval , $valid_intervals ) ) {print("Invalid interval given.\n"); exit(); }
 
 // Make sure that we have a dir for this host.
-$lhost_dir = "/data/lv_backups/{$host}";
+$lhost_dir = "/mnt/data/lv_backups/{$host}";
 // Does $lhost_dir exist?  if not, create it.
 if(!file_exists($lhost_dir) ) {$cmd = "mkdir -p {$lhost_dir}"; go($cmd, $debug);}
 
