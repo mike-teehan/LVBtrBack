@@ -22,7 +22,7 @@ if(!in_array($interval , $valid_intervals ) ) {print("Invalid interval given.\n"
 // Make sure that we have a dir for this host.
 $lhost_dir = "/data/lv_backups/{$host}";
 // Does $lhost_dir exist?  if not, create it.
-if(!file_exists($lhost_dir) ) {$cmd = "mkdir {$lhost_dir}"; go($cmd, $debug);}
+if(!file_exists($lhost_dir) ) {$cmd = "mkdir -p {$lhost_dir}"; go($cmd, $debug);}
 
 
 ### Get started:
@@ -81,7 +81,7 @@ function rotate_files($ldir, $snapshot, $max_intervals, $debug=false) {
 	if($debug) {print("Rotating files for: {$ldir}/{$snapshot}\n"); }
 
 	# Does $ldir exist?  if not, create it.
-	if(!file_exists($ldir) ) {$cmd = "mkdir {$ldir}"; go($cmd, $debug);}
+	if(!file_exists($ldir) ) {$cmd = "mkdir -p {$ldir}"; go($cmd, $debug);}
 
 	// Handle the nth case specially:
 	if( file_exists("{$ldir}/{$snapshot}.{$max_intervals}") ) { $cmd = "rm -f {$ldir}/{$snapshot}.{$max_intervals}";  go($cmd, $debug); }
