@@ -1,6 +1,10 @@
 <?php
 require_once("classCommandLine.php");
 
+// Use the local hostname to prevent collisions between multiple backup servers
+// that might touch the same server simultaneously
+$hostname = gethostname();
+
 // Get info from command line args
 $args = CommandLine::parseArgs($_SERVER['argv']);
 $host=( (array_key_exists("host", $args) )?($args["host"]):(false) ) ;
@@ -28,12 +32,12 @@ foreach($lvs as $lv) {
 	$f = fopen($lock, 'x');
 	if ($f === false) { print("\nCan't acquire lock: {$lock}\n"); continue; }
 
-	$snapshot = "{$lv}_{$interval}_snapshot_{$date}";
+	$snapshot = "{$hostname}_{$lv}_{$interval}_snapshot_{$date}";
 	$ldir = "{$lhost_dir}/{$lv}";
 	$lfile = "{$lv}_{$interval}_snapshot";
 
         #  Start by removing any old backup snapshots that are lingering on the server
-        $cmd = "ssh {$host} 'find /dev -name {$lv}_* -exec lvremove -f {} \\;'"; go($cmd, $debug);
+        $cmd = "ssh {$host} 'find /dev -name {$hostname}_{$lv}_* -exec lvremove -f {} \\;'"; go($cmd, $debug);
 
         #  Connect to the remote server an create a snapshot
 	$cmd = "ssh {$host} lvcreate -L4G -s -n {$snapshot} /dev/{$vg}/{$lv}"; go($cmd, $debug);
